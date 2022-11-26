@@ -52,11 +52,13 @@ export const logout = createAction("auth/logout", () => {
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: (state) => {
-    state.isLoading = false;
-    state.isError = false;
-    state.isSuccess = false;
-    state.message = "";
+  reducers: {
+    reset: (state) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = false;
+      state.message = "";
+    },
   },
 
   extraReducers: (builder) => {
