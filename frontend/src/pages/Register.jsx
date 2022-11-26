@@ -1,6 +1,61 @@
+import { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
+import { register, reset } from "../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 function Register() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+  });
+
+  const { name, email, password, password2 } = formData;
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (password !== password2) {
+      toast.error("The two passwords do not match");
+    }
+
+    const userData = {
+      name,
+      email,
+      password,
+    };
+
+    dispatch(register(userData));
+  };
+
+  const { user, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [isError, message, isSuccess, user, navigate, dispatch]);
   return (
     <>
       <section className="heading">
@@ -11,15 +66,15 @@ function Register() {
       </section>
 
       <section className="form">
-        <form>
+        <form onSubmit={onSubmit}>
           <div className="form-group">
             <input
               type="text"
               className="form-control"
               id="name"
               name="name"
-              value=""
-              onChange=""
+              value={name}
+              onChange={onChange}
               placeholder="Enter your name"
               required
             />
@@ -30,8 +85,8 @@ function Register() {
               className="form-control"
               id="email"
               name="email"
-              value=""
-              onChange=""
+              value={email}
+              onChange={onChange}
               placeholder="Enter your email"
               required
             />
@@ -42,8 +97,8 @@ function Register() {
               className="form-control"
               id="password"
               name="password"
-              value=""
-              onChange=""
+              value={password}
+              onChange={onChange}
               placeholder="Enter password"
               required
             />
@@ -54,8 +109,8 @@ function Register() {
               className="form-control"
               id="password2"
               name="password2"
-              value=""
-              onChange=""
+              value={password2}
+              onChange={onChange}
               placeholder="Confirm password"
               required
             />
