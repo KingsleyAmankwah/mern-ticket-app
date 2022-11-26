@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 
+// @desc    Register a new user
+// @route   /api/users/
+// @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, password2 } = req.body;
 
@@ -48,9 +51,17 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
+
+// @desc    Authenticate user
+// @route   /api/users/login
+// @access  Public
 const loginUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Login User" });
 });
+
+// @desc    Get current user
+// @route   /api/users/me
+// @access  Private
 const getMe = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "user details" });
 });
