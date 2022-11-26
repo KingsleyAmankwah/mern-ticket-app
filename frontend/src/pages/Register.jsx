@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaUser } from "react-icons/fa";
-import { register, reset } from "../features/auth/authSlice";
+import { register } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -28,6 +28,9 @@ function Register() {
   const onSubmit = (e) => {
     e.preventDefault();
 
+    if (!name || !email || !password || !password2) {
+      toast.error("Please add all fields");
+    }
     if (password !== password2) {
       toast.error("The two passwords do not match");
     }
@@ -38,24 +41,20 @@ function Register() {
       password,
     };
 
-    dispatch(register(userData));
+    dispatch(register(userData))
+      .unwrap()
+      .then((user) => {
+        toast.success(`Registered new user - ${user.name}`);
+        navigate("/");
+      });
+    // .catch(toast.error);
   };
 
-  const { user, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+  const { isLoading } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
-
-    if (isSuccess || user) {
-      navigate("/");
-    }
-
-    dispatch(reset());
-  }, [isError, message, isSuccess, user, navigate, dispatch]);
+  if (isLoading) {
+    return <>...Loading</>;
+  }
   return (
     <>
       <section className="heading">
@@ -76,7 +75,6 @@ function Register() {
               value={name}
               onChange={onChange}
               placeholder="Enter your name"
-              required
             />
           </div>
           <div className="form-group">
@@ -88,7 +86,6 @@ function Register() {
               value={email}
               onChange={onChange}
               placeholder="Enter your email"
-              required
             />
           </div>
           <div className="form-group">
@@ -100,7 +97,6 @@ function Register() {
               value={password}
               onChange={onChange}
               placeholder="Enter password"
-              required
             />
           </div>
           <div className="form-group">
@@ -112,7 +108,6 @@ function Register() {
               value={password2}
               onChange={onChange}
               placeholder="Confirm password"
-              required
             />
           </div>
           <div className="form-group">
