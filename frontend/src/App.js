@@ -6,8 +6,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
-// NOTE: Here we have removed the nested routing as the path is the same
-
 function App() {
   return (
     <>
