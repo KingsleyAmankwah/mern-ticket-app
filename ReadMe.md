@@ -25,7 +25,7 @@ cd frontend
 npm install
 ```
 
-### Run Server
+### Run Backend
 
 ```
 npm run server
