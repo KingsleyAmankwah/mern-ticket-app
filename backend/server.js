@@ -8,4 +8,5 @@ connectDB();
 
 const app = express();
 
+app.use("/api/users", require("./routes/userRoutes"));
 app.listen(Port, () => console.log(`Server started on Port ${Port}`));
