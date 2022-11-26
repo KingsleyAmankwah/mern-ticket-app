@@ -88,10 +88,10 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.user = action.payload;
-      })
-      .addCase(logout.fulfilled, (state) => {
-        state.user = null;
       });
+    // .addCase(logout.fulfilled, (state) => {
+    //   state.user = null;
+    // });
   },
 });
 
