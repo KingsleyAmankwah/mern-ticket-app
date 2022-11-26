@@ -1,10 +1,10 @@
 # MERN STACK Ticket Support App
-
+Support ticket application built with the MERN stack. 
 # Tech Stack
 
 ```
 Frontend - ReactJs
-Backend - NodeJs
+Backend - NodeJs, Express
 Database - MongoDB
 State management - Redux toolkit
 
