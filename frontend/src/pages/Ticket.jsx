@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal from "react-modal";
 import { FaPlus } from "react-icons/fa";
+import BackButton from "../components/BackButton";
 
 // import BackButton from "../components/BackButton";
 
@@ -29,6 +30,7 @@ function Ticket() {
   return (
     <div className="ticket-page">
       <header className="ticket-header">
+        <BackButton />
         <h2>
           Ticket ID
           <span className={`status `}>status</span>
