@@ -8,6 +8,7 @@ import NewTicket from "./pages/New Ticket";
 import Register from "./pages/Register";
 import Ticket from "./pages/Ticket";
 import Tickets from "./pages/Tickets";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -19,9 +20,30 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/new-ticket" element={<NewTicket />} />
-            <Route path="/tickets" element={<Tickets />} />
-            <Route path="/ticket/:ticketId" element={<Ticket />} />
+            <Route
+              path="/new-ticket"
+              element={
+                <PrivateRoute>
+                  <NewTicket />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/tickets"
+              element={
+                <PrivateRoute>
+                  <Tickets />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/ticket/:ticketId"
+              element={
+                <PrivateRoute>
+                  <Ticket />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </div>
       </Router>
