@@ -2,7 +2,6 @@ const express = require("express");
 const {
   createTicket,
   getTicket,
-  getTicket,
   updateTicket,
   deleteTicket,
   getTickets,
