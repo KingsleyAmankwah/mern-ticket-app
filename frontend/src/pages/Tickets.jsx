@@ -1,6 +1,17 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import BackButton from "../components/BackButton";
+import TicketItem from "../components/TicketItem";
+import { getTickets } from "../features/tickets/ticketSlice";
 
 function Tickets() {
+  const { tickets } = useSelector((state) => state.tickets);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getTickets());
+  }, [dispatch]);
   return (
     <>
       <BackButton />
@@ -12,6 +23,18 @@ function Tickets() {
           <div>Status</div>
           <div></div>
         </div>
+
+        {tickets.length > 0 ? (
+          <>
+            {tickets.map((ticket) => (
+              <TicketItem key={ticket._id} ticket={ticket} />
+            ))}
+          </>
+        ) : (
+          <>
+            <div>No tickets available</div>
+          </>
+        )}
       </div>
     </>
   );
