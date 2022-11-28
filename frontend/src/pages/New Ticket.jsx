@@ -1,6 +1,37 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import BackButton from "../components/BackButton";
+import { createTicket } from "../features/tickets/ticketSlice";
 
 function NewTicket() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.auth);
+
+  const [name] = useState(user.name);
+  const [email] = useState(user.email);
+  const [product, setProduct] = useState("iPhone");
+  const [description, setDescription] = useState("");
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    const ticketData = {
+      product,
+      description,
+    };
+
+    dispatch(createTicket(ticketData))
+      .unwrap()
+      .then(() => {
+        navigate("/tickets");
+        toast.success("New Ticket created!");
+      })
+      .catch(toast.error);
+  };
+
   return (
     <>
       <BackButton />
@@ -12,16 +43,21 @@ function NewTicket() {
       <section className="form">
         <div className="form-group">
           <label htmlFor="name">Customer Name</label>
-          <input type="text" className="form-control" value="" disabled />
+          <input type="text" className="form-control" value={name} disabled />
         </div>
         <div className="form-group">
           <label htmlFor="email">Customer Email</label>
-          <input type="text" className="form-control" value="" disabled />
+          <input type="text" className="form-control" value={email} disabled />
         </div>
-        <form>
+        <form onSubmit={onSubmit}>
           <div className="form-group">
             <label htmlFor="product">Product</label>
-            <select name="product" id="product" value="">
+            <select
+              name="product"
+              id="product"
+              value={product}
+              onChange={(e) => setProduct(e.target.value)}
+            >
               <option value="iPhone">iPhone</option>
               <option value="Macbook Pro">Macbook Pro</option>
               <option value="iMac">iMac</option>
@@ -35,7 +71,8 @@ function NewTicket() {
               id="description"
               className="form-control"
               placeholder="Description"
-              value=""
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
           <div className="form-group">
