@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { FaPlus } from "react-icons/fa";
 import BackButton from "../components/BackButton";
-
-// import BackButton from "../components/BackButton";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getTicket } from "../features/tickets/ticketSlice";
+import { toast } from "react-toastify";
 
 const customStyles = {
   content: {
@@ -27,20 +29,35 @@ function Ticket() {
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
 
+  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { ticketId } = useParams();
+
+  const { ticket } = useSelector((state) => state.tickets);
+
+  useEffect(() => {
+    dispatch(getTicket(ticketId)).unwrap().catch(toast.error);
+  }, [ticketId, dispatch]);
+
   return (
     <div className="ticket-page">
       <header className="ticket-header">
         <BackButton />
         <h2>
-          Ticket ID
-          <span className={`status `}>status</span>
+          Ticket ID: {ticket && ticket._id}
+          <span className={`status status-${ticket && ticket.status}`}>
+            {ticket && ticket.status}
+          </span>
         </h2>
-        <h3>Date Submitted:</h3>
-        <h3>Product: </h3>
+        <h3>
+          Date Submitted:{" "}
+          {new Date(ticket && ticket.createdAt).toLocaleString("en-US")}
+        </h3>
+        <h3>Product:{ticket && ticket.product} </h3>
         <hr />
         <div className="ticket-desc">
           <h3>Description of Issue</h3>
-          <p>description</p>
+          <p>{ticket && ticket.description}</p>
         </div>
         <h2>Notes</h2>
       </header>
