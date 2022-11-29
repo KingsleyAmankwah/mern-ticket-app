@@ -24,11 +24,12 @@ function Tickets() {
           <div></div>
         </div>
 
-        {tickets.length > 0 ? (
+        {tickets && tickets.length > 0 ? (
           <>
-            {tickets.map((ticket) => (
-              <TicketItem key={ticket._id} ticket={ticket} />
-            ))}
+            {tickets &&
+              tickets.map((ticket) => (
+                <TicketItem key={ticket._id} ticket={ticket} />
+              ))}
           </>
         ) : (
           <>
