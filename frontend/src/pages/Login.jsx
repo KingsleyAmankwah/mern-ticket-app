@@ -36,9 +36,7 @@ function Login() {
     dispatch(login(userData))
       .unwrap()
       .then((user) => {
-        // NOTE: by unwrapping the AsyncThunkAction we can navigate the user after
-        // getting a good response from our API or catch the AsyncThunkAction
-        // rejection to show an error message
+     
         toast.success(`Logged in as ${user.name}`);
         navigate("/");
       })
