@@ -25,12 +25,6 @@ function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // NOTE: no need for useEffect here as we can catch the
-  // AsyncThunkAction rejection in our onSubmit or redirect them on the
-  // resolution
-  // Side effects shoulld go in event handlers where possible
-  // source: - https://beta.reactjs.org/learn/keeping-components-pure#where-you-can-cause-side-effects
-
   const onSubmit = (e) => {
     e.preventDefault();
 
@@ -46,9 +40,6 @@ function Register() {
       dispatch(register(userData))
         .unwrap()
         .then((user) => {
-          // NOTE: by unwrapping the AsyncThunkAction we can navigate the user after
-          // getting a good response from our API or catch the AsyncThunkAction
-          // rejection to show an error message
           toast.success(`Registered new user - ${user.name}`);
           navigate("/");
         })
