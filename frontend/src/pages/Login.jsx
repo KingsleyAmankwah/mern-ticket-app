@@ -3,6 +3,7 @@ import { FaSignInAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
 import { login } from "../features/auth/authSlice";
 
 function Login() {
@@ -36,7 +37,6 @@ function Login() {
     dispatch(login(userData))
       .unwrap()
       .then((user) => {
-     
         toast.success(`Logged in as ${user.name}`);
         navigate("/");
       })
@@ -44,7 +44,7 @@ function Login() {
   };
 
   if (isLoading) {
-    return <>...Loading</>;
+    return <Spinner />;
   }
 
   return (
