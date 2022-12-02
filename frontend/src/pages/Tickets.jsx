@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import BackButton from "../components/BackButton";
+import Spinner from "../components/Spinner";
 import TicketItem from "../components/TicketItem";
 import { getTickets } from "../features/tickets/ticketSlice";
 
@@ -12,6 +13,11 @@ function Tickets() {
   useEffect(() => {
     dispatch(getTickets());
   }, [dispatch]);
+
+  if (!tickets) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <BackButton />
