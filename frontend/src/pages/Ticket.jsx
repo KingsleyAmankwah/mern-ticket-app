@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { getTicket, closeTicket } from "../features/tickets/ticketSlice";
 import { toast } from "react-toastify";
-
+import { addNote } from "../features/notes/noteSlice";
+import Spinner from "../components/Spinner";
+// import NoteItem from "../components/NoteItem";
 const customStyles = {
   content: {
     width: "600px",
@@ -24,7 +26,7 @@ Modal.setAppElement("#root");
 
 function Ticket() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
+  const [noteText, setNoteText] = useState("");
   // Open/close modal
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
@@ -34,6 +36,7 @@ function Ticket() {
   const { ticketId } = useParams();
 
   const { ticket } = useSelector((state) => state.tickets);
+  // const { notes } = useSelector((state) => state.notes);
 
   const onTicketClose = () => {
     dispatch(closeTicket(ticketId))
@@ -45,9 +48,24 @@ function Ticket() {
       .catch(toast.error);
   };
 
+  const onNoteSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addNote({ noteText, ticketId }))
+      .unwrap()
+      .then(() => {
+        setNoteText("");
+        closeModal();
+      })
+      .catch(toast.error);
+  };
+
   useEffect(() => {
     dispatch(getTicket(ticketId)).unwrap().catch(toast.error);
   }, [ticketId, dispatch]);
+
+  if (!ticket) {
+    return <Spinner />;
+  }
 
   return (
     <div className="ticket-page">
@@ -86,11 +104,13 @@ function Ticket() {
         <button className="btn-close" onClick={closeModal}>
           X
         </button>
-        <form>
+        <form onSubmit={onNoteSubmit}>
           <div className="form-group">
             <textarea
               name="noteText"
               id="noteText"
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
               className="form-control"
               placeholder="Note text"
             ></textarea>
@@ -102,6 +122,10 @@ function Ticket() {
           </div>
         </form>
       </Modal>
+
+      {/* {notes.map((note) => (
+        <NoteItem key={note._id} note={note} />
+      ))} */}
 
       {ticket && ticket.status !== "closed" && (
         <button className="btn btn-block btn-danger" onClick={onTicketClose}>
