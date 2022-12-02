@@ -3,7 +3,7 @@ const { addNote, getNote } = require("../controllers/noteController");
 const router = express.Router();
 const { protect } = require("../middlewares/authMiddleware");
 
-router.post("/:ticketId/notes", protect, addNote);
-router.get("/:ticketId/notes", protect, getNote);
+router.post("/:ticketId/note", protect, addNote);
+router.get("/:ticketId/note", protect, getNote);
 
 module.exports = router;
