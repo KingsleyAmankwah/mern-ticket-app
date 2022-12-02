@@ -44,7 +44,7 @@ export const noteSlice = createSlice({
         state.notes = action.payload;
       })
       .addCase(addNote.fulfilled, (state, action) => {
-        state.notes.push(action.payload);
+        state.notes = action.payload;
       });
   },
 });
