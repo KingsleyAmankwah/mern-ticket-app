@@ -3,8 +3,8 @@ import Modal from "react-modal";
 import { FaPlus } from "react-icons/fa";
 import BackButton from "../components/BackButton";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getTicket } from "../features/tickets/ticketSlice";
+import { useParams, useNavigate } from "react-router-dom";
+import { getTicket, closeTicket } from "../features/tickets/ticketSlice";
 import { toast } from "react-toastify";
 
 const customStyles = {
@@ -29,11 +29,21 @@ function Ticket() {
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { ticketId } = useParams();
 
   const { ticket } = useSelector((state) => state.tickets);
+
+  const onTicketClose = () => {
+    dispatch(closeTicket(ticketId))
+      .unwrap()
+      .then(() => {
+        toast.success("Ticket closed successfluly");
+        navigate("/tickets");
+      })
+      .catch(toast.error);
+  };
 
   useEffect(() => {
     dispatch(getTicket(ticketId)).unwrap().catch(toast.error);
@@ -93,7 +103,11 @@ function Ticket() {
         </form>
       </Modal>
 
-      <button className="btn btn-block btn-danger">Close Ticket</button>
+      {ticket && ticket.status !== "closed" && (
+        <button className="btn btn-block btn-danger" onClick={onTicketClose}>
+          Close Ticket
+        </button>
+      )}
     </div>
   );
 }
