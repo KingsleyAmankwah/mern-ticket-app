@@ -8,6 +8,7 @@ import { getTicket, closeTicket } from "../features/tickets/ticketSlice";
 import { toast } from "react-toastify";
 import { addNote } from "../features/notes/noteSlice";
 import Spinner from "../components/Spinner";
+import { Admin } from "../components/Protect";
 // import NoteItem from "../components/NoteItem";
 const customStyles = {
   content: {
@@ -87,51 +88,53 @@ function Ticket() {
           <h3>Description of Issue</h3>
           <p>{ticket && ticket.description}</p>
         </div>
-        <h2>Notes</h2>
       </header>
-
-      <button onClick={openModal} className="btn">
-        <FaPlus /> Add Note
-      </button>
-
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Add Note"
-      >
-        <h2>Add Note</h2>
-        <button className="btn-close" onClick={closeModal}>
-          X
-        </button>
-        <form onSubmit={onNoteSubmit}>
-          <div className="form-group">
-            <textarea
-              name="noteText"
-              id="noteText"
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-              className="form-control"
-              placeholder="Note text"
-            ></textarea>
-          </div>
-          <div className="form-group">
-            <button className="btn" type="submit">
-              Submit
-            </button>
-          </div>
-        </form>
-      </Modal>
-
-      {/* {notes.map((note) => (
-        <NoteItem key={note._id} note={note} />
-      ))} */}
 
       {ticket && ticket.status !== "closed" && (
         <button className="btn btn-block btn-danger" onClick={onTicketClose}>
           Close Ticket
         </button>
       )}
+      <h2>Notes</h2>
+
+      <Admin>
+        <button onClick={openModal} className="btn">
+          <FaPlus /> Add Note
+        </button>
+
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Add Note"
+        >
+          <h2>Add Note</h2>
+          <button className="btn-close" onClick={closeModal}>
+            X
+          </button>
+          <form onSubmit={onNoteSubmit}>
+            <div className="form-group">
+              <textarea
+                name="noteText"
+                id="noteText"
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
+                className="form-control"
+                placeholder="Note text"
+              ></textarea>
+            </div>
+            <div className="form-group">
+              <button className="btn" type="submit">
+                Submit
+              </button>
+            </div>
+          </form>
+        </Modal>
+      </Admin>
+
+      {/* {notes.map((note) => (
+        <NoteItem key={note._id} note={note} />
+      ))} */}
     </div>
   );
 }
