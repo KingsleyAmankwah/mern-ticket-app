@@ -74,13 +74,37 @@ const loginUser = asyncHandler(async (req, res) => {
   //Check for user email
   const user = await User.findOne({ email });
 
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found, please signup");
+  }
+
+  const passwordIsCorrect = await bcrypt.compare(password, user.password);
+
+  if (!passwordIsCorrect) {
+    res.status(400);
+    throw new Error("Invalid email or password");
+  }
+
+  //Generate token
+  const token = generateToken(user._id);
+
+  //Send http only token
+  res.cookie("token", token, {
+    path: "/",
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    expires: new Date(Date.now() + 1000 * 86400), //1day
+  });
+
   //Check user and passwords match
-  if (user && (await bcrypt.compare(password, user.password))) {
+  if (user && passwordIsCorrect) {
     res.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
-      token: generateToken(user._id),
+      token,
     });
   } else {
     res.status(401);
