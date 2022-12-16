@@ -1,9 +1,9 @@
 const express = require("express");
 const { addNote, getNote } = require("../controllers/noteController");
 const router = express.Router();
-const { protect } = require("../middlewares/authMiddleware");
+const { protect, adminOnly } = require("../middlewares/authMiddleware");
 
-router.post("/:ticketId/note", protect, addNote);
+router.post("/:ticketId/note", protect, adminOnly, addNote);
 router.get("/:ticketId/note", protect, getNote);
 
 module.exports = router;
