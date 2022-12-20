@@ -34,25 +34,8 @@ const registerUser = asyncHandler(async (req, res) => {
     password: hashedPassword,
   });
 
-  //Generate token
-  const token = generateToken(user._id);
-
-  //send http-only token
-  res.cookie("token", token, {
-    path: "/",
-    httpOnly: true,
-    sameSite: "none",
-    secure: true,
-    expires: new Date(Date.now() + 1000 * 86400), //1 day
-  });
-
   if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      token,
-    });
+    res.status(201).json(user).save();
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -113,6 +96,17 @@ const loginUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Login User" });
 });
 
+//Logout User
+const logoutUser = asyncHandler(async (req, res) => {
+  res.cookie("token", "", {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  return res.status(200).json({ message: "Logout successful" });
+});
+
 // @desc    Get current user
 // @route   /api/users/me
 // @access  Private
@@ -129,5 +123,6 @@ const generateToken = (id) => {
 module.exports = {
   registerUser,
   loginUser,
+  logoutUser,
   getMe,
 };

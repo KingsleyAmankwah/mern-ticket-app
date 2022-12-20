@@ -14,10 +14,10 @@ const { protect } = require("../middlewares/authMiddleware");
 // const noteRouter = require("./noteRoutes");
 // router.use("/:ticketId/notes", noteRouter);
 
-router.post("/", protect, createTicket);
-router.get("/", protect, getTickets);
-router.get("/:id", protect, getTicket);
-router.put("/:id", protect, updateTicket);
-router.delete("/:id", protect, deleteTicket);
+router.post("/", createTicket);
+router.get("/", getTickets);
+router.get("/:id", getTicket);
+router.put("/:id", updateTicket);
+router.delete("/:id", deleteTicket);
 
 module.exports = router;

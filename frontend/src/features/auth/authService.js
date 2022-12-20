@@ -1,14 +1,11 @@
 import axios from "axios";
 
-const API_URL = "/api/users/";
+const BACKEND_URL = "http://localhost:5000";
+export const API_URL = `${BACKEND_URL}/api/users/`;
 
 //Regsiter User
 const registerUser = async (userData) => {
   const response = await axios.post(API_URL, userData);
-
-  if (response.data) {
-    localStorage.setItem("user", JSON.stringify(response.data));
-  }
 
   return response.data;
 };
@@ -17,16 +14,13 @@ const registerUser = async (userData) => {
 const loginUser = async (userData) => {
   const response = await axios.post(API_URL + "login", userData);
 
-  if (response.data) {
-    localStorage.setItem("user", JSON.stringify(response.data));
-  }
-
   return response.data;
 };
 
 //Logout User
-const logout = () => {
-  localStorage.removeItem("user");
+const logout = async () => {
+  const response = await axios.get(API_URL + "logout");
+  return response.data.message;
 };
 
 const authService = {
