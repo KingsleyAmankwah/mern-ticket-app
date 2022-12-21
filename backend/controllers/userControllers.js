@@ -35,7 +35,22 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    res.status(201).json(user).save();
+    //Generate token
+    const token = generateToken(user._id);
+
+    //Send http only token
+    res.cookie("accessToken", token, {
+      path: "/",
+      httpOnly: true,
+      // expires: new Date(Date.now() + 1000 * 86400), //1day
+    });
+
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token,
+    });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -73,12 +88,10 @@ const loginUser = asyncHandler(async (req, res) => {
   const token = generateToken(user._id);
 
   //Send http only token
-  res.cookie("token", token, {
+  res.cookie("accessToken", token, {
     path: "/",
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    expires: new Date(Date.now() + 1000 * 86400), //1day
+    // expires: new Date(Date.now() + 1000 * 86400), //1day
   });
 
   //Check user and passwords match
