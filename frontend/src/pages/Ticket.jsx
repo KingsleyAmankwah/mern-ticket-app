@@ -8,7 +8,7 @@ import { getTicket, closeTicket } from "../features/tickets/ticketSlice";
 import { toast } from "react-toastify";
 import { addNote } from "../features/notes/noteSlice";
 import Spinner from "../components/Spinner";
-import { Admin } from "../components/Protect";
+import { AdminRoute } from "../components/PrivateRoute";
 // import NoteItem from "../components/NoteItem";
 const customStyles = {
   content: {
@@ -49,6 +49,7 @@ function Ticket() {
       .catch(toast.error);
   };
 
+  //Create Note
   const onNoteSubmit = (e) => {
     e.preventDefault();
     dispatch(addNote({ noteText, ticketId }))
@@ -97,7 +98,7 @@ function Ticket() {
       )}
       <h2>Notes</h2>
 
-      <Admin>
+      <AdminRoute>
         <button onClick={openModal} className="btn">
           <FaPlus /> Add Note
         </button>
@@ -130,7 +131,7 @@ function Ticket() {
             </div>
           </form>
         </Modal>
-      </Admin>
+      </AdminRoute>
 
       {/* {notes.map((note) => (
         <NoteItem key={note._id} note={note} />
