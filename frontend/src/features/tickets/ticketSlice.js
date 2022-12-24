@@ -26,7 +26,8 @@ export const getTickets = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      return await ticketService.getTickets(token);
+      const admin = thunkAPI.getState().auth.user.role.admin;
+      return await ticketService.getTickets(token, admin);
     } catch (error) {
       return thunkAPI.rejectWithValue(extractErrorMessage(error));
     }
