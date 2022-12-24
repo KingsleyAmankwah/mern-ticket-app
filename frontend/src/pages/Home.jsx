@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FaQuestionCircle, FaTicketAlt } from "react-icons/fa";
-
+import { AdminRoute } from "../components/PrivateRoute";
 function Home() {
   return (
     <>
@@ -16,6 +16,11 @@ function Home() {
       <Link to="/tickets" className="btn btn-block">
         <FaTicketAlt /> View My Tickets
       </Link>
+      <AdminRoute>
+        <Link to="/users-tickets" className="btn btn-reverse btn-block">
+          <FaTicketAlt /> Users Ticket
+        </Link>
+      </AdminRoute>
     </>
   );
 }
