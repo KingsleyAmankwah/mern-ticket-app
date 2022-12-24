@@ -40,6 +40,7 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      role: user.role,
       token: generateToken(user._id),
     });
   } else {
@@ -56,12 +57,18 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found, please register");
+  }
+
   // Check user and passwords match
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
+      role: user.role,
       token: generateToken(user._id),
     });
   } else {
@@ -81,6 +88,17 @@ const getMe = asyncHandler(async (req, res) => {
   };
   res.status(200).json(user);
 });
+// @desc    Get current user
+// @route   /api/users/me
+// @access  Private
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find().sort("-createdAt").select("-password");
+  if (!users) {
+    res.status(500);
+    throw new Error("Something went wrong");
+  }
+  res.status(200).json(users);
+});
 
 // Generate token
 const generateToken = (id) => {
@@ -93,4 +111,5 @@ module.exports = {
   registerUser,
   loginUser,
   getMe,
+  getUsers,
 };
