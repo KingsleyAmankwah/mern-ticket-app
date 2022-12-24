@@ -8,7 +8,8 @@ import NewTicket from "./pages/New Ticket";
 import Register from "./pages/Register";
 import Ticket from "./pages/Ticket";
 import Tickets from "./pages/Tickets";
-import PrivateRoute from "./components/PrivateRoute";
+import { PrivateRoute } from "./components/PrivateRoute";
+// import UsersTicket from "./pages/UsersTicket";
 
 function App() {
   return (
@@ -36,6 +37,14 @@ function App() {
                 </PrivateRoute>
               }
             />
+            {/* <Route
+              path="/users-tickets"
+              element={
+                <PrivateRoute>
+                  <UsersTicket />
+                </PrivateRoute>
+              }
+            /> */}
             <Route
               path="/ticket/:ticketId"
               element={
