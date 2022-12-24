@@ -36,4 +36,13 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = { protect };
+const staffOnly = asyncHandler(async (req, res) => {
+  if ((req.user && req.user.role === "admin") || req.user.role === "staff") {
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Not authorized as an admin");
+  }
+});
+
+module.exports = { protect, staffOnly };
